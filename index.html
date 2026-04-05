@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>dbuuMedi PRO</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(120deg,#1e90ff,#6a5acd);
+  color:white;
+}
+
+/* Navbar */
+.navbar{
+  padding:15px 40px;
+  background:rgba(255,255,255,0.1);
+  font-size:20px;
+}
+
+/* Hero */
+.hero{
+  text-align:center;
+  padding:40px;
+}
+
+input{
+  padding:10px;
+  margin:5px;
+  border-radius:20px;
+  border:none;
+}
+
+button{
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:#007bff;
+  color:white;
+  cursor:pointer;
+}
+
+/* Cards */
+.container{
+  display:grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+.card{
+  background:rgba(255,255,255,0.95);
+  color:black;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.card img{
+  width:100%;
+  border-radius:10px;
+}
+
+.red{color:red;}
+.green{color:green;}
+.orange{color:orange;}
+
+.report{
+  background:red;
+  margin-top:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">💙 dbuuMedi PRO</div>
+
+<div class="hero">
+  <h1>All-in-One Healthcare System</h1>
+
+  <input id="search" placeholder="Search (paracetamol)">
+  <br>
+
+  <input id="age" placeholder="Age">
+  <input id="temp" placeholder="Temperature °C">
+  <input id="bp" placeholder="BP">
+
+  <br>
+  <button onclick="searchMedicine()">Search</button>
+
+  <p>Popular: paracetamol • ibuprofen • amoxicillin • cetirizine • aspirin</p>
+</div>
+
+<div id="output"></div>
+
+<script>
+
+function searchMedicine(){
+
+let input=document.getElementById("search").value.toLowerCase().trim();
+let age=document.getElementById("age").value;
+let temp=document.getElementById("temp").value;
+let bp=document.getElementById("bp").value;
+
+let out=document.getElementById("output");
+
+let data={
+
+paracetamol:{
+img:"https://cdn.pixabay.com/photo/2016/03/31/19/56/pill-1297141_1280.png",
+use:"Pain & Fever",
+child:"250mg",
+adult:"500mg",
+senior:"650mg",
+alert:"High usage in Delhi",
+doctors:[
+{name:"Dr Sharma",num:"9876543210"},
+{name:"Dr Mehta",num:"9123456780"}
+],
+stores:[
+{name:"CarePlus",dist:"2km"},
+{name:"City Medicos",dist:"1.5km"}
+]
+},
+
+ibuprofen:{
+img:"https://cdn.pixabay.com/photo/2017/01/31/13/14/pills-2028208_1280.png",
+use:"Pain & swelling",
+child:"200mg",
+adult:"400mg",
+senior:"600mg",
+alert:"Moderate alert in Mumbai",
+doctors:[
+{name:"Dr Khan",num:"9000000002"},
+{name:"Dr Singh",num:"9000000001"}
+],
+stores:[
+{name:"Apollo",dist:"1km"},
+{name:"MedLife",dist:"2km"}
+]
+},
+
+amoxicillin:{
+img:"https://cdn.pixabay.com/photo/2017/03/07/19/54/pills-2124342_1280.png",
+use:"Bacterial Infection",
+child:"125mg",
+adult:"250mg",
+senior:"500mg",
+alert:"High usage in Lucknow",
+doctors:[
+{name:"Dr Verma",num:"9111111111"},
+{name:"Dr Patel",num:"9222222222"}
+],
+stores:[
+{name:"HealthCare Store",dist:"1.2km"},
+{name:"Wellness Pharma",dist:"2.3km"}
+]
+},
+
+cetirizine:{
+img:"https://cdn.pixabay.com/photo/2014/12/21/23/28/tablets-575052_1280.png",
+use:"Allergy Relief",
+child:"5mg",
+adult:"10mg",
+senior:"10mg",
+alert:"Low alert",
+doctors:[
+{name:"Dr Roy",num:"9333333333"},
+{name:"Dr Khan",num:"9444444444"}
+],
+stores:[
+{name:"City Pharmacy",dist:"1km"},
+{name:"Medico Store",dist:"2km"}
+]
+},
+
+aspirin:{
+img:"https://cdn.pixabay.com/photo/2016/11/29/04/17/pills-1869754_1280.png",
+use:"Blood thinning & pain relief",
+child:"Not recommended",
+adult:"75-150mg",
+senior:"75mg",
+alert:"High risk for children",
+doctors:[
+{name:"Dr Sharma",num:"9555555555"},
+{name:"Dr Mehta",num:"9666666666"}
+],
+stores:[
+{name:"Apollo Pharmacy",dist:"1.5km"},
+{name:"CarePlus",dist:"2.5km"}
+]
+}
+
+};
+
+if(data[input]){
+
+let d=data[input];
+
+/* AI LOGIC */
+let advice="✅ Safe to take";
+let risk="Low";
+
+if(temp>102){
+  advice="⚠ High Fever! Consult Doctor";
+  risk="High";
+}
+if(bp>140){
+  advice="⚠ High BP! Avoid medicine without doctor";
+  risk="High";
+}
+if(age<10){
+  advice="⚠ Child patient – use low dose";
+  risk="Medium";
+}
+
+let riskColor = risk=="High"?"red":risk=="Medium"?"orange":"green";
+
+out.innerHTML=`
+
+<div class="container">
+
+<div class="card">
+<img src="${d.img}">
+<h2>${input.toUpperCase()}</h2>
+<p><b>Use:</b> ${d.use}</p>
+<button class="report" onclick="alert('Reported Successfully')">🚨 Report</button>
+</div>
+
+<div class="card">
+<h3>Dosage</h3>
+<p>👶 Child: ${d.child}</p>
+<p>🧑 Adult: ${d.adult}</p>
+<p>👴 Senior: ${d.senior}</p>
+</div>
+
+<div class="card red">
+<h3>⚠ Alert</h3>
+<p>${d.alert}</p>
+</div>
+
+<div class="card">
+<h3>👨‍⚕️ Doctors</h3>
+${d.doctors.map(doc=>`<p>${doc.name} 📞 ${doc.num}</p>`).join("")}
+</div>
+
+<div class="card">
+<h3>🏥 Stores</h3>
+${d.stores.map(s=>`<p>${s.name} - ${s.dist}</p>`).join("")}
+</div>
+
+<div class="card">
+<h3>🧠 AI Advice</h3>
+<p>${advice}</p>
+<p class="${riskColor}"><b>Risk Level: ${risk}</b></p>
+</div>
+
+</div>
+`;
+
+}else{
+out.innerHTML="<div class='card'>❌ Medicine not found</div>";
+}
+
+}
+
+</script>
+
+</body>
+</html>
